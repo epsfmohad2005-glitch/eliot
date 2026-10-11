@@ -1,0 +1,291 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   ELIOT — ROOT IDENTITY (TS-3)
+   Single dark, terminal-influenced visual identity. See ADR-007.
+   Supersedes the prior six-theme Theme System 2.0.
+   ========================================================================== */
+
+:root {
+  /* --- GLOBAL FONTS --- */
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+
+  /* --- SPACING TOKENS --- */
+  --spacing-base: 8px;
+  --spacing-stack-xs: 4px;
+  --spacing-stack-sm: 8px;
+  --spacing-stack-md: 16px;
+  --spacing-stack-lg: 32px;
+  --spacing-margin-mobile: 24px;
+  --spacing-margin-desktop: 64px;
+
+  /* --- Z-INDEX LAYERS --- */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-command-deck: 500;
+  --z-toast: 600;
+
+  /* --- MOTION TOKENS --- */
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+
+  --motion-page: all var(--duration-normal) var(--ease-snappy);
+  --motion-modal: all var(--duration-fast) var(--ease-snappy);
+  --motion-focus: all var(--duration-fast) var(--ease-snappy);
+  --motion-hover: all var(--duration-fast) var(--ease-snappy);
+
+  /* --- ROOT IDENTITY (single palette, applied by default) --- */
+  --surface-bg: #0B0C0C;
+  --surface-card: #131515;
+  --surface-low: #0E0F0F;
+  --surface-high: #1A1D1C;
+  --surface-bright: #232726;
+  --text-primary: #D8DAD6;
+  --text-secondary: #8B9490;
+  --text-muted: #5A625E;
+  --accent-signal: #B5453D;
+  --accent-on-signal: #0B0C0C;
+  --border-color: #252827;
+  --border-subtle: #181A19;
+  --mode-radius: 2px;
+  --focus-ring-color: #B5453D;
+  --status-success: #5C8A73;
+  --status-warning: #B8823D;
+  --status-error: #9C4A7A;
+  --chart-primary: #B5453D;
+  --chart-secondary: #8C6A63;
+  --editor-bg: #0A0B0B;
+  --pdf-viewer-bg: #131515;
+}
+
+/* ==========================================================================
+   ROOT MODE — explicit selector kept for parity with data-theme="root"
+   ========================================================================== */
+.mode-root, [data-theme="root"] {
+  --surface-bg: #0B0C0C;
+  --surface-card: #131515;
+  --surface-low: #0E0F0F;
+  --surface-high: #1A1D1C;
+  --surface-bright: #232726;
+  --text-primary: #D8DAD6;
+  --text-secondary: #8B9490;
+  --text-muted: #5A625E;
+  --accent-signal: #B5453D;
+  --accent-on-signal: #0B0C0C;
+  --border-color: #252827;
+  --border-subtle: #181A19;
+  --mode-radius: 2px;
+  --focus-ring-color: #B5453D;
+  --status-success: #5C8A73;
+  --status-warning: #B8823D;
+  --status-error: #9C4A7A;
+  --chart-primary: #B5453D;
+  --chart-secondary: #8C6A63;
+  --editor-bg: #0A0B0B;
+  --pdf-viewer-bg: #131515;
+}
+
+/* ==========================================================================
+   TAILWIND CSS V4 THEME MAPPINGS
+   ========================================================================== */
+
+@theme {
+  --font-ui-body: 'Inter', sans-serif;
+  --font-mono-ui: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+
+  --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   UTILITY HELPER CLASSES & ACCESSIBILITY
+   ========================================================================== */
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--mode-radius);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-signal);
+}
+
+/* Background Grids & Textures */
+.paper-texture {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.blueprint-grid-bg {
+  background-size: 32px 32px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+/* High Contrast Focus States */
+:focus-visible {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+/* High Contrast Selection */
+::selection {
+  background-color: var(--accent-signal);
+  color: var(--accent-on-signal);
+}
+
+/* RTL Support Logical Helpers */
+[dir="rtl"] .rtl-mirror {
+  transform: scaleX(-1);
+}
+
+/* Motion Constitution: Focus Environment Warm-up & Cool-down Transitions (AE-1A.1) */
+.focus-transition-shell {
+  transition: max-width 600ms cubic-bezier(0.16, 1, 0.3, 1),
+              padding 600ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.focus-warmup-fade {
+  animation: focusWarmupFadeIn 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes focusWarmupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Motion Constitution: Reduced Motion Rule */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   ROOT IDENTITY — OPTIONAL TERMINAL TEXTURE
+   Opt-in utilities only. Apply deliberately, not globally — restraint over
+   spectacle. See ADR-007 / THEME_CRITIQUE.md for why these stay subtle.
+   ========================================================================== */
+
+/* Faint CRT scanlines. Use on large static surfaces (empty states, boot
+   screen), never on dense text-heavy panels where it hurts legibility. */
+.scanlines {
+  position: relative;
+}
+.scanlines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(216, 218, 214, 0.035) 0px,
+    rgba(216, 218, 214, 0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Blinking block cursor — for terminal-style labels ("root@eliot:~$ "),
+   not for body copy. Respects reduced-motion via the rule above. */
+.terminal-cursor::after {
+  content: '\2588';
+  display: inline-block;
+  margin-inline-start: 2px;
+  color: var(--accent-signal);
+  animation: terminalBlink 1.1s steps(1) infinite;
+}
+@keyframes terminalBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Bracketed label — wraps a short caption in monospace brackets,
+   e.g. status tags, section eyebrows. Text content only, no extra markup. */
+.bracket-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+.bracket-label::before { content: '[ '; color: var(--text-muted); }
+.bracket-label::after { content: ' ]'; color: var(--text-muted); }
+
+/* Typewriter reveal — for a SHORT line (one sentence max) that should
+   feel "typed" on entrance. Set --chars to the string length, e.g.
+   style="--chars: 32". Plays once, not looped — a terminal doesn't
+   retype its own boot log. */
+.type-in {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--accent-signal);
+  width: 0;
+  animation:
+    typeReveal 900ms steps(var(--chars, 20), end) forwards,
+    typeCaretOff 1.1s steps(1) 900ms 3 forwards;
+}
+@keyframes typeReveal {
+  from { width: 0; }
+  to { width: var(--chars, 20)ch; }
+}
+@keyframes typeCaretOff {
+  0%, 49% { border-color: var(--accent-signal); }
+  50%, 100% { border-color: transparent; }
+}
+
+/* Soft focus glow — reserved for the single primary action on a screen
+   (see CDS accent rule: one accent-filled control per view). A short,
+   low-radius, low-opacity halo on hover/focus — not a permanent neon
+   outline. Never stack with .scanlines on the same element. */
+.glow-signal {
+  transition: box-shadow var(--duration-normal) var(--ease-snappy);
+}
+.glow-signal:hover, .glow-signal:focus-visible {
+  box-shadow: 0 0 0 1px var(--accent-signal), 0 0 12px -2px var(--accent-signal);
+}
+
+/* Scan sweep — one soft highlight band drifting slowly down a tall
+   static surface (boot screen, empty state). Slow and infrequent by
+   design: a "system is alive" cue, not a loading spinner. */
+.scan-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.scan-sweep::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, rgba(181, 69, 61, 0.05), transparent);
+  animation: scanSweep 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes scanSweep {
+  0% { top: -40%; }
+  100% { top: 100%; }
+}
